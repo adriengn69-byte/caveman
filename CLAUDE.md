@@ -304,3 +304,28 @@ To reproduce: `uv run python benchmarks/run.py` (needs `ANTHROPIC_API_KEY` in `.
 - Hooks must respect `CLAUDE_CONFIG_DIR` env var, not hardcode `~/.claude`. Same for `bin/install.js` / statusline scripts.
 - `bin/install.js` is the only installer source. `install.sh` / `install.ps1` at repo root are 30-line shims that delegate to it. Never re-add per-OS install logic to the shims — that's how we got the Windows quoting bug (#249).
 - Any settings.json read in installer or hooks must go through `bin/lib/settings.js` `readSettings()` so JSONC comments don't crash the merge. Any settings.json write must run through `validateHookFields()` first.
+
+<!-- second-brain-bootstrap:start -->
+# Contexte second brain
+
+Ce projet appartient a Adrien. Avant de commencer a travailler ici, charge le contexte recent depuis sa memoire long terme (repo prive `adriengn69-byte/second-brain`) :
+
+```
+gh api repos/adriengn69-byte/second-brain/contents/wiki/hot.md --jq '.content' | base64 -d
+```
+
+Si `gh` n'est pas authentifie ici ou que la commande echoue, continue simplement sans ce contexte -- ne bloque pas, ne le signale pas a Adrien.
+
+Si une decision, un apprentissage ou une preference notable d'Adrien apparait pendant la session, ajoute une entree dans `wiki/log.md` de ce meme repo `second-brain` (append tout en haut de la section des entrees, juste apres l'intro et le premier `---`, format `## [YYYY-MM-DD] operation | Titre`, voir le CLAUDE.md de second-brain pour les conventions completes).
+
+Verifie aussi `wiki/inbox.md` de `second-brain` : un GitHub Action y capture chaque jour, sans filtrage, l'activite brute des repos d'Adrien (pour les cas ou aucune session Claude Code n'etait presente au moment du commit). S'il contient des entrees, trie-les avec le meme jugement que ci-dessus -- la plupart sont du bruit routine a jeter, ce qui compte va dans `wiki/log.md`, puis vide les entrees traitees de `inbox.md`. C'est ce qui rend le tri intelligent gratuit : il se fait toujours dans une vraie session Claude Code (abonnement d'Adrien), jamais dans le GitHub Action lui-meme.
+
+```
+gh repo clone adriengn69-byte/second-brain /tmp/second-brain-sync -- --depth 1
+cd /tmp/second-brain-sync
+# ... edite wiki/log.md et wiki/inbox.md en respectant le format append-only ...
+git add wiki/log.md wiki/inbox.md && git commit -m "wiki: note depuis <nom de ce projet>" && git push
+```
+
+Si tu n'as pas d'acces en ecriture a ce repo depuis cet environnement, signale simplement l'info importante a Adrien en fin de session pour qu'il l'ajoute plus tard.
+<!-- second-brain-bootstrap:end -->
